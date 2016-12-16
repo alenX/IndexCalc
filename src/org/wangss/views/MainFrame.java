@@ -18,25 +18,11 @@ public class MainFrame {
         frame.setTitle("二进制ifIndex");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         FlowLayout flow = new FlowLayout();
-        GridLayout borderLayout = new GridLayout();
-
         frame.setLayout(flow);
-
-
         JPanel choicePanel = new JPanel();
         JComboBox<String> typeChoices = new JComboBox<String>();
         typeChoices.addItem("GPON");
         typeChoices.addItem("EPON");
-        /*typeChoices.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                calcRes();
-            }
-
-            private void calcRes() {
-
-            }
-        });*/
 
         JLabel jLabel = new JLabel("类型");
 

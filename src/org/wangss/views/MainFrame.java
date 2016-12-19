@@ -2,8 +2,7 @@ package org.wangss.views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +10,10 @@ import java.util.regex.Pattern;
  * Created by wangss on 2016/12/13.
  */
 public class MainFrame {
+    private static JTextField ponidText = new JTextField(15);
+    private static JTextField tenRs = new JTextField(20);
+    private static JTextField rs = new JTextField(20);
+
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setSize(300, 400);
@@ -20,9 +23,16 @@ public class MainFrame {
         FlowLayout flow = new FlowLayout();
         frame.setLayout(flow);
         JPanel choicePanel = new JPanel();
-        JComboBox<String> typeChoices = new JComboBox<String>();
+        JComboBox<String> typeChoices = new JComboBox<>();
         typeChoices.addItem("GPON");
         typeChoices.addItem("EPON");
+        typeChoices.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectItem = typeChoices.getSelectedItem().toString();
+                String ponid = ponidText.getText();
+                calcIndex(ponid, selectItem);
+            }
+        });
 
         JLabel jLabel = new JLabel("类型");
 
@@ -32,12 +42,13 @@ public class MainFrame {
         oltText.setVisible(true);
         oltText.setBackground(Color.gray);
 
-        JTextField ponidText = new JTextField(15);
+
         ponidText.setBackground(Color.gray);
         ponidText.setText("NA-");
         ponidText.setLayout(new GridLayout(2, 1));
 
         choicePanel.add(jLabel);
+
         choicePanel.add(typeChoices);
         JPanel input = new JPanel();
         jLabel = new JLabel("OLTID");
@@ -48,7 +59,7 @@ public class MainFrame {
         input_ponid.add(jLabel);
         input_ponid.add(ponidText);
         JPanel result = new JPanel();
-        JTextField rs = new JTextField(20);
+
         rs.setEditable(false);
         rs.setSize(200, 10);
         jLabel = new JLabel("二进制");
@@ -56,40 +67,21 @@ public class MainFrame {
         result.add(rs);
 
         JPanel tenResult = new JPanel();
-        JTextField tenRs = new JTextField(20);
+
         tenRs.setSize(200, 10);
         tenRs.setEditable(false);
         jLabel = new JLabel("十进制");
         tenResult.add(jLabel);
         tenResult.add(tenRs);
 
-
         Panel btnPanel = new Panel();
         Button yesBtn = new Button();
-        yesBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        yesBtn.addActionListener(e -> {
+            {
                 String selectItem = typeChoices.getSelectedItem().toString();
                 String ponid = ponidText.getText();
-                if (ponid == null || ponid.trim().equals("") || !isRegRight(ponid)) {
-                    ponidText.setBackground(Color.red);
-                    ponidText.setText("格式错误!");
-                    return;
-                }
-                if ("GPON".equals(selectItem)) {
-                    tenRs.setText(getGPONIfIndex(ponid));
-                    rs.setText(Long.toBinaryString(Long.valueOf(getGPONIfIndex(ponid))));
-                } else if ("EPON".equals(selectItem)) {
-                    tenRs.setText(getEPONIfIndex(ponid));
-                    rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
-                }
+                calcIndex(ponid, selectItem);
                 ponidText.setBackground(Color.gray);
-
-            }
-            private boolean isRegRight(String ponid) {
-                Pattern pattern = Pattern.compile("^(NA|0|[1-9]?\\d)-(0|[1-9]?\\d)-(0|[1-9]?\\d)-(0|[1-9]?\\d)$");
-                Matcher m = pattern.matcher(ponid);
-                return m.matches();
             }
         });
         yesBtn.setLabel("计算");
@@ -102,6 +94,30 @@ public class MainFrame {
         frame.add(btnPanel);
         frame.setVisible(true);
 
+    }
+
+    private static void calcIndex(String ponid, String selectItem) {
+        if (("NA-").equals(ponid)) {
+            return;
+        }
+        if (ponid == null || ponid.trim().equals("") || !isRegRight(ponid)) {
+            ponidText.setBackground(Color.red);
+            ponidText.setText("格式错误!");
+            return;
+        }
+        if ("GPON".equals(selectItem)) {
+            tenRs.setText(getGPONIfIndex(ponid));
+            rs.setText(Long.toBinaryString(Long.valueOf(getGPONIfIndex(ponid))));
+        } else if ("EPON".equals(selectItem)) {
+            tenRs.setText(getEPONIfIndex(ponid));
+            rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
+        }
+    }
+
+    private static boolean isRegRight(String ponid) {
+        Pattern pattern = Pattern.compile("^(NA|0|[1-9]?\\d)-(0|[1-9]?\\d)-(0|[1-9]?\\d)-(0|[1-9]?\\d)$");
+        Matcher m = pattern.matcher(ponid);
+        return m.matches();
     }
 
     private static String getGPONIfIndex(String ponid) {
@@ -122,4 +138,3 @@ public class MainFrame {
         return bin;
     }
 }
-

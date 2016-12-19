@@ -81,7 +81,6 @@ public class MainFrame {
                 String selectItem = typeChoices.getSelectedItem().toString();
                 String ponid = ponidText.getText();
                 calcIndex(ponid, selectItem);
-                ponidText.setBackground(Color.gray);
             }
         });
         yesBtn.setLabel("计算");
@@ -101,8 +100,10 @@ public class MainFrame {
             return;
         }
         if (ponid == null || ponid.trim().equals("") || !isRegRight(ponid)) {
-            ponidText.setBackground(Color.red);
+            ponidText.setBackground(Color.ORANGE);
             ponidText.setText("格式错误!");
+            tenRs.setText("");
+            rs.setText("");
             return;
         }
         if ("GPON".equals(selectItem)) {
@@ -112,6 +113,7 @@ public class MainFrame {
             tenRs.setText(getEPONIfIndex(ponid));
             rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
         }
+        ponidText.setBackground(Color.gray);
     }
 
     private static boolean isRegRight(String ponid) {

@@ -3,6 +3,8 @@ package org.wangss.views;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +15,7 @@ public class MainFrame {
     private static JTextField ponidText = new JTextField(15);
     private static JTextField tenRs = new JTextField(20);
     private static JTextField rs = new JTextField(20);
+    private static boolean isPon = true;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -42,9 +45,18 @@ public class MainFrame {
         oltText.setVisible(true);
         oltText.setBackground(Color.gray);
 
-
         ponidText.setBackground(Color.gray);
         ponidText.setText("NA-");
+        ponidText.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (!isPon){
+                    ponidText.setBackground(Color.gray);
+                    ponidText.setText("NA-");
+                    isPon = true;
+                }
+            }
+        });
         ponidText.setLayout(new GridLayout(2, 1));
 
         choicePanel.add(jLabel);
@@ -102,6 +114,7 @@ public class MainFrame {
         if (ponid == null || ponid.trim().equals("") || !isRegRight(ponid)) {
             ponidText.setBackground(Color.ORANGE);
             ponidText.setText("格式错误!");
+            isPon = false;
             tenRs.setText("");
             rs.setText("");
             return;

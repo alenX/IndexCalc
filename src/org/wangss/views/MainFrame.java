@@ -141,6 +141,7 @@ public class MainFrame {
     }
 
     private static void reverseCalcIndex(String selectItem, String rsStr) {
+
         String bin = Long.toBinaryString(Long.valueOf(rsStr));
         rs.setText(bin);
         ponidText.setText("NA-"+Long.valueOf(bin.substring(7,13),2)+"-"+Long.valueOf(bin.substring(13,19),2)+"-"+Long.valueOf(bin.substring(19,24),2));

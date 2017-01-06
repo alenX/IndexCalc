@@ -81,7 +81,7 @@ public class MainFrame {
         JPanel tenResult = new JPanel();
 
         tenRs.setSize(200, 10);
-        tenRs.setEditable(false);
+        tenRs.setEditable(true);
         jLabel = new JLabel("十进制");
         tenResult.add(jLabel);
         tenResult.add(tenRs);
@@ -97,6 +97,17 @@ public class MainFrame {
         });
         yesBtn.setLabel("计算");
         btnPanel.add(yesBtn);
+
+        Button reverseBtn = new Button();
+        reverseBtn.addActionListener(e -> {
+            {
+                String rs = tenRs.getText().trim();
+                String selectItem = typeChoices.getSelectedItem().toString();
+                reverseCalcIndex(selectItem, rs);
+            }
+        });
+        reverseBtn.setLabel("反向计算");
+        btnPanel.add(reverseBtn);
         frame.add(choicePanel);
         frame.add(input);
         frame.add(input_ponid);
@@ -126,6 +137,13 @@ public class MainFrame {
             tenRs.setText(getEPONIfIndex(ponid));
             rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
         }
+        ponidText.setBackground(Color.gray);
+    }
+
+    private static void reverseCalcIndex(String selectItem, String rsStr) {
+        String bin = Long.toBinaryString(Long.valueOf(rsStr));
+        rs.setText(bin);
+        ponidText.setText("NA-"+Long.valueOf(bin.substring(7,13),2)+"-"+Long.valueOf(bin.substring(13,19),2)+"-"+Long.valueOf(bin.substring(19,24),2));
         ponidText.setBackground(Color.gray);
     }
 

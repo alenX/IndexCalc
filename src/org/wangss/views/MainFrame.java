@@ -141,11 +141,23 @@ public class MainFrame {
     }
 
     private static void reverseCalcIndex(String selectItem, String rsStr) {
-
+        if (rsStr==null||rsStr.trim().equals("")){
+            tenRs.setText("不能为空!");
+            tenRs.setBackground(Color.magenta);
+            return;
+        }
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher m = pattern.matcher(rsStr);
+        if (!m.matches()){
+            tenRs.setText("必须为数字!");
+            tenRs.setBackground(Color.pink);
+            return;
+        }
         String bin = Long.toBinaryString(Long.valueOf(rsStr));
         rs.setText(bin);
         ponidText.setText("NA-"+Long.valueOf(bin.substring(7,13),2)+"-"+Long.valueOf(bin.substring(13,19),2)+"-"+Long.valueOf(bin.substring(19,24),2));
         ponidText.setBackground(Color.gray);
+        tenRs.setBackground(Color.gray);
     }
 
     private static boolean isRegRight(String ponid) {

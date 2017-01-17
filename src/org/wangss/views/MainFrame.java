@@ -29,15 +29,43 @@ public class MainFrame {
         JComboBox<String> typeChoices = new JComboBox<>();
         typeChoices.addItem("GPON");
         typeChoices.addItem("EPON");
-        typeChoices.addItemListener(e -> {
+        /*typeChoices.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectItem = typeChoices.getSelectedItem().toString();
                 String ponid = ponidText.getText();
+                String ponid = ponidText.getText();
                 calcIndex(ponid, selectItem);
+            }
+        });*/
+
+        JLabel jLabel = new JLabel("类型");
+
+        JLabel companyLabel = new JLabel("厂商");
+        JComboBox<String> companyComboBox = new JComboBox<>();
+        companyComboBox.addItem("HW");
+        companyComboBox.addItem("ZTE");
+        companyComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                typeChoices.removeAllItems();
+                String company = companyComboBox.getSelectedItem().toString();
+                if (company.equals("HW")) {
+                    typeChoices.addItem("GPON");
+                    typeChoices.addItem("EPON");
+                } else if (company.equals("ZTE")) {
+                    typeChoices.addItem("平台类型1");
+                    typeChoices.addItem("平台类型3");
+                    typeChoices.addItem("平台类型4");
+                    typeChoices.addItem("平台类型9");
+                    typeChoices.addItem("平台类型10");
+                    typeChoices.addItem("PON类型1");
+                    typeChoices.addItem("PON类型3");
+                    typeChoices.addItem("PON类型6");
+                    typeChoices.addItem("PON类型7");
+                    typeChoices.addItem("PON类型9");
+                }
             }
         });
 
-        JLabel jLabel = new JLabel("类型");
 
         JTextField oltText = new JTextField(15);
 
@@ -50,7 +78,7 @@ public class MainFrame {
         ponidText.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!isPon){
+                if (!isPon) {
                     ponidText.setBackground(Color.gray);
                     ponidText.setText("NA-");
                     isPon = true;
@@ -59,8 +87,9 @@ public class MainFrame {
         });
         ponidText.setLayout(new GridLayout(2, 1));
 
+        choicePanel.add(companyLabel);
+        choicePanel.add(companyComboBox);
         choicePanel.add(jLabel);
-
         choicePanel.add(typeChoices);
         JPanel input = new JPanel();
         jLabel = new JLabel("OLTID");
@@ -92,7 +121,8 @@ public class MainFrame {
             {
                 String selectItem = typeChoices.getSelectedItem().toString();
                 String ponid = ponidText.getText();
-                calcIndex(ponid, selectItem);
+                String company = companyComboBox.getSelectedItem().toString();
+                calcIndex(ponid, selectItem, company);
             }
         });
         yesBtn.setLabel("计算");
@@ -118,44 +148,50 @@ public class MainFrame {
 
     }
 
-    private static void calcIndex(String ponid, String selectItem) {
-        if (("NA-").equals(ponid)) {
-            return;
+    private static void calcIndex(String ponid, String selectItem, String company) {
+        if (company.equals("HW")) {
+
+
+            if (("NA-").equals(ponid)) {
+                return;
+            }
+            if (ponid == null || ponid.trim().equals("") || !isRegRight(ponid)) {
+                ponidText.setBackground(Color.ORANGE);
+                ponidText.setText("格式错误!");
+                isPon = false;
+                tenRs.setText("");
+                rs.setText("");
+                return;
+            }
+            if ("GPON".equals(selectItem)) {
+                tenRs.setText(getGPONIfIndex(ponid));
+                rs.setText(Long.toBinaryString(Long.valueOf(getGPONIfIndex(ponid))));
+            } else if ("EPON".equals(selectItem)) {
+                tenRs.setText(getEPONIfIndex(ponid));
+                rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
+            }
+            ponidText.setBackground(Color.gray);
+        } else if (company.equals("ZTE")) {
+
         }
-        if (ponid == null || ponid.trim().equals("") || !isRegRight(ponid)) {
-            ponidText.setBackground(Color.ORANGE);
-            ponidText.setText("格式错误!");
-            isPon = false;
-            tenRs.setText("");
-            rs.setText("");
-            return;
-        }
-        if ("GPON".equals(selectItem)) {
-            tenRs.setText(getGPONIfIndex(ponid));
-            rs.setText(Long.toBinaryString(Long.valueOf(getGPONIfIndex(ponid))));
-        } else if ("EPON".equals(selectItem)) {
-            tenRs.setText(getEPONIfIndex(ponid));
-            rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
-        }
-        ponidText.setBackground(Color.gray);
     }
 
     private static void reverseCalcIndex(String selectItem, String rsStr) {
-        if (rsStr==null||rsStr.trim().equals("")){
+        if (rsStr == null || rsStr.trim().equals("")) {
             tenRs.setText("不能为空!");
             tenRs.setBackground(Color.magenta);
             return;
         }
         Pattern pattern = Pattern.compile("\\d+");
         Matcher m = pattern.matcher(rsStr);
-        if (!m.matches()){
+        if (!m.matches()) {
             tenRs.setText("必须为数字!");
             tenRs.setBackground(Color.pink);
             return;
         }
         String bin = Long.toBinaryString(Long.valueOf(rsStr));
         rs.setText(bin);
-        ponidText.setText("NA-"+Long.valueOf(bin.substring(7,13),2)+"-"+Long.valueOf(bin.substring(13,19),2)+"-"+Long.valueOf(bin.substring(19,24),2));
+        ponidText.setText("NA-" + Long.valueOf(bin.substring(7, 13), 2) + "-" + Long.valueOf(bin.substring(13, 19), 2) + "-" + Long.valueOf(bin.substring(19, 24), 2));
         ponidText.setBackground(Color.gray);
         tenRs.setBackground(Color.gray);
     }

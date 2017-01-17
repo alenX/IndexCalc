@@ -189,8 +189,10 @@ public class MainFrame {
                 tenRs.setText(getEPONIfIndex(ponid));
                 rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
             }
+            tenRs.setBackground(Color.gray);
             ponidText.setBackground(Color.gray);
         } else if (company.equals("ZTE")) {
+
 
         }
     }

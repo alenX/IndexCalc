@@ -15,7 +15,12 @@ public class MainFrame {
     private static JTextField ponidText = new JTextField(15);
     private static JTextField tenRs = new JTextField(20);
     private static JTextField rs = new JTextField(20);
+    private static JTextField hexRs = new JTextField(20);
     private static boolean isPon = true;
+    private static JPanel hexResult = new JPanel();
+    private static JPanel tenResult = new JPanel();
+    private static JPanel result = new JPanel();
+    private static Button reverseBtn = new Button();
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -51,6 +56,10 @@ public class MainFrame {
                 if (company.equals("HW")) {
                     typeChoices.addItem("GPON");
                     typeChoices.addItem("EPON");
+                    hexResult.setVisible(false);
+                    tenResult.setVisible(true);
+                    result.setVisible(true);
+                    reverseBtn.setVisible(true);
                 } else if (company.equals("ZTE")) {
                     typeChoices.addItem("平台类型1");
                     typeChoices.addItem("平台类型3");
@@ -62,6 +71,10 @@ public class MainFrame {
                     typeChoices.addItem("PON类型6");
                     typeChoices.addItem("PON类型7");
                     typeChoices.addItem("PON类型9");
+                    hexResult.setVisible(true);
+                    tenResult.setVisible(false);
+                    result.setVisible(false);
+                    reverseBtn.setVisible(false);
                 }
             }
         });
@@ -99,7 +112,7 @@ public class MainFrame {
         jLabel = new JLabel("PONID");
         input_ponid.add(jLabel);
         input_ponid.add(ponidText);
-        JPanel result = new JPanel();
+//        JPanel result = new JPanel();
 
         rs.setEditable(false);
         rs.setSize(200, 10);
@@ -107,13 +120,20 @@ public class MainFrame {
         result.add(jLabel);
         result.add(rs);
 
-        JPanel tenResult = new JPanel();
-
+//        JPanel tenResult = new JPanel();
         tenRs.setSize(200, 10);
         tenRs.setEditable(true);
         jLabel = new JLabel("十进制");
         tenResult.add(jLabel);
         tenResult.add(tenRs);
+
+//        JPanel  hexResult = new JPanel();
+        hexRs.setSize(200, 10);
+        hexRs.setEditable(true);
+        jLabel = new JLabel("十六进制");
+        hexResult.add(jLabel);
+        hexResult.add(hexRs);
+        hexResult.setVisible(false);
 
         Panel btnPanel = new Panel();
         Button yesBtn = new Button();
@@ -128,7 +148,7 @@ public class MainFrame {
         yesBtn.setLabel("计算");
         btnPanel.add(yesBtn);
 
-        Button reverseBtn = new Button();
+//        Button reverseBtn = new Button();
         reverseBtn.addActionListener(e -> {
             {
                 String rs = tenRs.getText().trim();
@@ -143,6 +163,7 @@ public class MainFrame {
         frame.add(input_ponid);
         frame.add(result);
         frame.add(tenResult);
+        frame.add(hexResult);
         frame.add(btnPanel);
         frame.setVisible(true);
 
@@ -150,8 +171,6 @@ public class MainFrame {
 
     private static void calcIndex(String ponid, String selectItem, String company) {
         if (company.equals("HW")) {
-
-
             if (("NA-").equals(ponid)) {
                 return;
             }

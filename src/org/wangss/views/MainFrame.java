@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.awt.Color.lightGray;
+
 /**
  * Created by wangss on 2016/12/13.
  */
@@ -24,7 +26,7 @@ public class MainFrame {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setSize(300, 400);
+        frame.setSize(320, 400);
         frame.setLocation(300, 300);
         frame.setTitle("二进制ifIndex");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -86,7 +88,7 @@ public class MainFrame {
         oltText.setVisible(true);
         oltText.setBackground(Color.gray);
 
-        ponidText.setBackground(Color.gray);
+        ponidText.setBackground(Color.lightGray);
         ponidText.setText("NA-");
         ponidText.addMouseListener(new MouseAdapter() {
             @Override
@@ -123,14 +125,17 @@ public class MainFrame {
 //        JPanel tenResult = new JPanel();
         tenRs.setSize(200, 10);
         tenRs.setEditable(true);
+        tenRs.setBackground(Color.lightGray);
         jLabel = new JLabel("十进制");
         tenResult.add(jLabel);
         tenResult.add(tenRs);
 
 //        JPanel  hexResult = new JPanel();
         hexRs.setSize(200, 10);
-        hexRs.setEditable(true);
+        hexRs.setEditable(false);
+        hexRs.setBackground(Color.gray);
         jLabel = new JLabel("十六进制");
+
         hexResult.add(jLabel);
         hexResult.add(hexRs);
         hexResult.setVisible(false);
@@ -189,8 +194,8 @@ public class MainFrame {
                 tenRs.setText(getEPONIfIndex(ponid));
                 rs.setText(Long.toBinaryString(Long.valueOf(getEPONIfIndex(ponid))));
             }
-            tenRs.setBackground(Color.gray);
-            ponidText.setBackground(Color.gray);
+            tenRs.setBackground(Color.lightGray);
+            ponidText.setBackground(Color.lightGray);
         } else if (company.equals("ZTE")) {
 
 
@@ -213,8 +218,8 @@ public class MainFrame {
         String bin = Long.toBinaryString(Long.valueOf(rsStr));
         rs.setText(bin);
         ponidText.setText("NA-" + Long.valueOf(bin.substring(7, 13), 2) + "-" + Long.valueOf(bin.substring(13, 19), 2) + "-" + Long.valueOf(bin.substring(19, 24), 2));
-        ponidText.setBackground(Color.gray);
-        tenRs.setBackground(Color.gray);
+        ponidText.setBackground(Color.lightGray);
+        tenRs.setBackground(Color.lightGray);
     }
 
     private static boolean isRegRight(String ponid) {
